@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  php:
+    image: php:8.1-apache
+    container_name: php-cont
+    ports:
+      - "8080:80"
+    volumes:
+      - ../crud-operations:/var/www/html
+    depends_on:
+      - mysql-cont
+    working_dir: /var/www/html
+    command: bash -c "docker-php-ext-install mysqli && apache2-foreground"
+
+  mysql-cont:
+    image: mysql
+    container_name: mysql-cont
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: crud_example
+      MYSQL_USER: mysqluser
+      MYSQL_PASSWORD: mysqlpw123
+    ports:
+      - "3387:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
